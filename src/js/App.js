@@ -109,8 +109,14 @@ export class App extends React.Component {
         ? 'content-container spymaster'
         : 'content-container'
       }>
+        <Scoreboard boardState={this.state.boardState}/>
+        <Board
+          board={this.state.board}
+          boardState={this.state.boardState}
+          isSpymaster={this.state.isSpymaster}
+          updateBoardState={this._updateBoardState.bind(this)}/>
         <div className='key-input-container'>
-          <div className='key-input-label'>Key:</div>
+          <div className='key-input-label'>Board Key:</div>
           <form onSubmit={this._regenerateKey.bind(this)}>
             <KeyInput initialValue={this.state.seed} />
           </form>
@@ -120,20 +126,14 @@ export class App extends React.Component {
             Submit
           </div>
         </div>
-        <Scoreboard boardState={this.state.boardState}/>
-        <Board
-          board={this.state.board}
-          boardState={this.state.boardState}
-          isSpymaster={this.state.isSpymaster}
-          updateBoardState={this._updateBoardState.bind(this)}/>
         <div className='buttons-container unselectable'>
           <div
             className='spymaster-toggle button'
             onClick={this._toggleSpymasterMode.bind(this)}>
             <i className={
               this.state.isSpymaster
-              ? "fa fa-unlock"
-              : "fa fa-lock"
+              ? "fa fa-eye-slash"
+              : "fa fa-eye"
             } aria-hidden="true"/>
             <div>
               {

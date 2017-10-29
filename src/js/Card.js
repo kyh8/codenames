@@ -5,22 +5,18 @@ export class Card extends React.Component {
     super(props);
   }
   render() {
+    let className = 'word-item ' + this.props.cardType;
+    if (this.props.isRevealed) {
+      className += ' revealed';
+    }
+    if (this.props.isChecked) {
+      className += ' checked';
+    }
     return (
       <div
-        className={
-          this.props.isRevealed
-          ? 'word-item ' + this.props.cardType + ' revealed'
-          : 'word-item ' + this.props.cardType
-        }
+        className={className}
         onClick={this.props.revealCard}>
         {this.props.word}
-        <div className={
-          this.props.isChecked
-          ? 'word-item-checkbox checked'
-          : 'word-item-checkbox'
-        }>
-          <div className={'word-item-checkbox-check'}></div>
-        </div>
       </div>
     );
   }

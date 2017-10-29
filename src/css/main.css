@@ -24,15 +24,22 @@ body {
   flex-wrap: wrap;
 }
 
+.spymaster .word-item.checked {
+  border-color: green;
+  box-shadow: 0 0 4px green;
+  opacity: 0.5;
+}
+
 .word-item {
-  width: 150px;
-  height: 100px;
+  width: 144px;
+  height: 94px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 18px;
   background-color: #f5f5dc;
   cursor: pointer;
+  border: 3px solid transparent;
   box-shadow: 0 0 1px black;
   border-radius: 8px;
   margin: 10px;
@@ -56,6 +63,10 @@ body {
 
 .spymaster .word-item:hover {
   background-color: lightgreen;
+}
+
+.spymaster .word-item.checked:hover {
+  background-color: #f5f5dc;
 }
 
 .word-item-checkbox {
@@ -102,51 +113,54 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .key-input-label {
-
+  font-size: 14px;
 }
 
 #key-input {
   margin-left: 10px;
-  font-size: 18px;
+  font-size: 14px;
   width: 200px;
   outline: none;
   height: 24px;
   border: 0;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid gray;
   padding: 0;
 }
 
 #key-input:focus {
   border-bottom: 2px solid #4C79A6;
+  margin-bottom: -1px;
 }
 
 .key-submit {
   margin-left: 10px;
   font-size: 14px;
   line-height: 20px;
-  padding: 4px 10px;
+  padding: 2px 8px;
   border: 1px solid transparent;
   border-radius: 4px;
   cursor: pointer;
-  background-color: lightgray;
+  background-color: rgba(0,122,255,0.8);
+  color: white;
 }
 
 .key-submit:hover {
-  border-color: gray;
+  box-shadow: 0 0 2px black;
 }
 
 .buttons-container {
-  margin-top: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .button {
-  padding: 10px 18px;
+  padding: 6px 12px;
   background-color: lightgray;
   cursor: pointer;
   border-radius: 8px;
@@ -165,6 +179,11 @@ body {
 
 .buttons-container .button:first-child {
   margin-left: 0;
+}
+
+.reset-button {
+  background-color: red;
+  color: white;
 }
 
 .spymaster-toggle div {

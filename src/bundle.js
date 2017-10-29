@@ -21447,13 +21447,19 @@ var App = exports.App = function (_React$Component) {
       return React.createElement(
         'div',
         { className: this.state.isSpymaster ? 'content-container spymaster' : 'content-container' },
+        React.createElement(Scoreboard, { boardState: this.state.boardState }),
+        React.createElement(Board, {
+          board: this.state.board,
+          boardState: this.state.boardState,
+          isSpymaster: this.state.isSpymaster,
+          updateBoardState: this._updateBoardState.bind(this) }),
         React.createElement(
           'div',
           { className: 'key-input-container' },
           React.createElement(
             'div',
             { className: 'key-input-label' },
-            'Key:'
+            'Board Key:'
           ),
           React.createElement(
             'form',
@@ -21468,12 +21474,6 @@ var App = exports.App = function (_React$Component) {
             'Submit'
           )
         ),
-        React.createElement(Scoreboard, { boardState: this.state.boardState }),
-        React.createElement(Board, {
-          board: this.state.board,
-          boardState: this.state.boardState,
-          isSpymaster: this.state.isSpymaster,
-          updateBoardState: this._updateBoardState.bind(this) }),
         React.createElement(
           'div',
           { className: 'buttons-container unselectable' },
@@ -21482,7 +21482,7 @@ var App = exports.App = function (_React$Component) {
             {
               className: 'spymaster-toggle button',
               onClick: this._toggleSpymasterMode.bind(this) },
-            React.createElement('i', { className: this.state.isSpymaster ? "fa fa-unlock" : "fa fa-lock", 'aria-hidden': 'true' }),
+            React.createElement('i', { className: this.state.isSpymaster ? "fa fa-eye-slash" : "fa fa-eye", 'aria-hidden': 'true' }),
             React.createElement(
               'div',
               null,
@@ -21579,9 +21579,9 @@ var Board = exports.Board = function (_React$Component) {
     value: function _revealCard(index) {
       var boardState = this.props.boardState;
       if (this.props.isSpymaster) {
-        boardState[index].isChecked = true;
+        boardState[index].isChecked = !boardState[index].isChecked;
       } else {
-        boardState[index].isRevealed = true;
+        boardState[index].isRevealed = !boardState[index].isRevealed;
       }
       this.props.updateBoardState(boardState);
     }
@@ -21630,17 +21630,19 @@ var Card = exports.Card = function (_React$Component) {
   _createClass(Card, [{
     key: 'render',
     value: function render() {
+      var className = 'word-item ' + this.props.cardType;
+      if (this.props.isRevealed) {
+        className += ' revealed';
+      }
+      if (this.props.isChecked) {
+        className += ' checked';
+      }
       return React.createElement(
         'div',
         {
-          className: this.props.isRevealed ? 'word-item ' + this.props.cardType + ' revealed' : 'word-item ' + this.props.cardType,
+          className: className,
           onClick: this.props.revealCard },
-        this.props.word,
-        React.createElement(
-          'div',
-          { className: this.props.isChecked ? 'word-item-checkbox checked' : 'word-item-checkbox' },
-          React.createElement('div', { className: 'word-item-checkbox-check' })
-        )
+        this.props.word
       );
     }
   }]);

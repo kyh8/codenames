@@ -48,9 +48,9 @@ export class Board extends React.Component {
   _revealCard(index) {
     let boardState = this.props.boardState;
     if (this.props.isSpymaster) {
-      boardState[index].isChecked = true;
+      boardState[index].isChecked = !boardState[index].isChecked;
     } else {
-      boardState[index].isRevealed = true;
+      boardState[index].isRevealed = !boardState[index].isRevealed;
     }
     this.props.updateBoardState(boardState);
   }
