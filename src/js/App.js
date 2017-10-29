@@ -1,19 +1,30 @@
+const Board = require('./Board');
 const React = require('react');
 const seedrandom = require('seedrandom');
+const KeyInput = require('./KeyInput');
 const WordSet = require('../data/wordset.json');
 
 const BOARD_SIZE = 25;
-
 export class App extends React.Component {
   constructor(props) {
     super(props);
+    const randomWord = WordSet.default_set[
+      Math.floor(Math.random() * WordSet.default_set.length)
+    ];
     this.state = {
-      seed: 'alan wu',
+      seed: randomWord,
+      isSpymaster: false,
+      board: [],
+      boardState: [],
     }
   }
 
-  _fetchBoard() {
-    Math.seedrandom(this.state.seed);
+  componentDidMount() {
+    this._fetchBoard(this.state.seed);
+  }
+
+  _fetchBoard(seed) {
+    Math.seedrandom(seed);
     const corpusSize = WordSet.default_set.length;
     let indices = [];
     for(let i = 0; i < corpusSize; i++) {
@@ -30,60 +41,79 @@ export class App extends React.Component {
     boardIndices.forEach((index) => {
       board.push(WordSet.default_set[index]);
     });
-    return board;
-  }
 
-  _renderBoard() {
-    const words = this._fetchBoard();
-    let rowSize = Math.sqrt(BOARD_SIZE);
-    let wordElements = [];
-
-    let rowIndex = 0;
-    let row = [];
-    let board = [];
-
-    words.forEach((word, index) => {
-      const wordElement = (
-        <div
-          className='word-item'
-          key={'word-item-' + index}>
-          {word}
-        </div>
-      );
-      row.push(wordElement);
-      if (rowIndex < rowSize - 1) {
-        rowIndex++;
-      } else {
-        rowIndex = 0;
-        const rowElement = (
-          <div
-            className='row-item'
-            key={'row-item-'+index}>
-            {row}
-          </div>
-        )
-        board.push(rowElement);
-        row = [];
+    let boardState = [];
+    const cardTypes = {
+      'neutral': 7,
+      'team1': 9,
+      'team2': 8,
+      'assassin': 1,
+    }
+    let availableSlots = [];
+    for(let i = 0; i < board.length; i++) {
+      const availableSlots = Object.keys(cardTypes).filter((card) => {
+        return cardTypes[card] > 0;
+      });
+      const card = availableSlots[Math.floor(Math.random() * availableSlots.length)];
+      cardTypes[card] = cardTypes[card] - 1;
+      boardState[i] = {
+        isRevealed: false,
+        cardType: card,
       }
+    }
+
+    this.setState({
+      board: board,
+      boardState: boardState,
     });
-    return board;
   }
 
   _regenerateKey(event) {
     event.preventDefault();
     const input = document.getElementById('key-input');
+    const newSeed = input.value;
+    if (newSeed.length == 0 || newSeed === this.state.seed) {
+      return;
+    }
+    const newBoard = this._fetchBoard(newSeed);
+    this._resetCards();
     this.setState({
-      seed: input.value,
+      seed: newSeed,
+      board: newBoard,
     });
+  }
+
+  _toggleSpymasterMode() {
+    this.setState({
+      isSpymaster: !this.state.isSpymaster,
+    });
+  }
+
+  _updateBoardState(boardState) {
+    this.setState({
+      boardState: boardState,
+    });
+  }
+
+  _resetCards() {
+    let boardState = this.state.boardState;
+    for(let i = 0; i < boardState.length; i++) {
+      boardState[i].isRevealed = false;
+    }
+    this._updateBoardState(boardState);
   }
 
   render() {
     return (
-      <div className='content-container'>
+      <div className={
+        this.state.isSpymaster
+        ? 'content-container spymaster'
+        : 'content-container'
+      }>
         <div className='key-input-container'>
           <div className='key-input-label'>Key:</div>
-          <form>
-            <input id='key-input' onSubmit={this._regenerateKey.bind(this, event)}/>
+          <form onSubmit={this._regenerateKey.bind(this)}>
+            <KeyInput initialValue={this.state.seed} />
           </form>
           <div
             className='key-submit'
@@ -91,8 +121,33 @@ export class App extends React.Component {
             Submit
           </div>
         </div>
-        <div className='game-board'>
-          {this._renderBoard()}
+        <Board
+          board={this.state.board}
+          boardState={this.state.boardState}
+          isSpymaster={this.state.isSpymaster}
+          updateBoardState={this._updateBoardState.bind(this)}/>
+        <div className='buttons-container unselectable'>
+          <div
+            className='spymaster-toggle button'
+            onClick={this._toggleSpymasterMode.bind(this)}>
+            <i className={
+              this.state.isSpymaster
+              ? "fa fa-unlock"
+              : "fa fa-lock"
+            } aria-hidden="true"/>
+            <div>
+              {
+                this.state.isSpymaster
+                ? 'Viewer Mode'
+                : 'Spymaster Mode'
+              }
+            </div>
+          </div>
+          <div
+            className='reset-button button'
+            onClick={this._resetCards.bind(this)}>
+            Reset
+          </div>
         </div>
       </div>
     );
