@@ -69,42 +69,6 @@ body {
   background-color: #f5f5dc;
 }
 
-.word-item-checkbox {
-  width: 20px;
-  height: 20px;
-  border-radius: 20px;
-  border: 1px solid gray;
-  background-color: #f6f6f6;
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  border: 1px solid white;
-  display: none;
-}
-
-.spymaster .word-item-checkbox {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.word-item-checkbox.checked {
-  background-color: green;
-}
-
-.word-item-checkbox-check {
-  background-color: white;
-  box-shadow: 0 0 1px black;
-  width: 10px;
-  height: 10px;
-  border-radius: 10px;
-  display: none;
-}
-
-.word-item-checkbox.checked .word-item-checkbox-check {
-  display: block;
-}
-
 .row-item {
   display: flex;
 }
@@ -124,9 +88,9 @@ body {
 #key-input {
   margin-left: 10px;
   font-size: 14px;
-  width: 200px;
+  width: 180px;
   outline: none;
-  height: 24px;
+  height: 30px;
   border: 0;
   border-bottom: 1px solid gray;
   padding: 0;
@@ -137,14 +101,8 @@ body {
   margin-bottom: -1px;
 }
 
-.key-submit {
+.key-submit.button {
   margin-left: 10px;
-  font-size: 14px;
-  line-height: 20px;
-  padding: 2px 8px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  cursor: pointer;
   background-color: rgba(0,122,255,0.8);
   color: white;
 }
@@ -167,6 +125,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 16px;
 }
 
 .button:hover {
@@ -182,8 +141,7 @@ body {
 }
 
 .reset-button {
-  background-color: red;
-  color: white;
+  margin-left: 10px;
 }
 
 .spymaster-toggle div {
@@ -204,12 +162,13 @@ body {
 
 .assassin.revealed,
 .spymaster .assassin {
-  background-color: #ffcc00;
+  background-color: black;
+  color: white;
 }
 
 .neutral.revealed,
 .spymaster .neutral {
-  background-color: gray;
+  background-color: lightgray;
 }
 
 .scoreboard-container {

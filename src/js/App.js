@@ -121,9 +121,14 @@ export class App extends React.Component {
             <KeyInput initialValue={this.state.seed} />
           </form>
           <div
-            className='key-submit'
+            className='key-submit button'
             onClick={this._regenerateKey.bind(this)}>
             Submit
+          </div>
+          <div
+            className='reset-button button'
+            onClick={this._resetCards.bind(this)}>
+            Reset
           </div>
         </div>
         <div className='buttons-container unselectable'>
@@ -142,11 +147,6 @@ export class App extends React.Component {
                 : 'Spymaster Mode'
               }
             </div>
-          </div>
-          <div
-            className='reset-button button'
-            onClick={this._resetCards.bind(this)}>
-            Reset
           </div>
         </div>
       </div>

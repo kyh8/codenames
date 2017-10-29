@@ -21469,9 +21469,16 @@ var App = exports.App = function (_React$Component) {
           React.createElement(
             'div',
             {
-              className: 'key-submit',
+              className: 'key-submit button',
               onClick: this._regenerateKey.bind(this) },
             'Submit'
+          ),
+          React.createElement(
+            'div',
+            {
+              className: 'reset-button button',
+              onClick: this._resetCards.bind(this) },
+            'Reset'
           )
         ),
         React.createElement(
@@ -21488,13 +21495,6 @@ var App = exports.App = function (_React$Component) {
               null,
               this.state.isSpymaster ? 'Viewer Mode' : 'Spymaster Mode'
             )
-          ),
-          React.createElement(
-            'div',
-            {
-              className: 'reset-button button',
-              onClick: this._resetCards.bind(this) },
-            'Reset'
           )
         )
       );
