@@ -14,6 +14,13 @@ export class Card extends React.Component {
         }
         onClick={this.props.revealCard}>
         {this.props.word}
+        <div className={
+          this.props.isChecked
+          ? 'word-item-checkbox checked'
+          : 'word-item-checkbox'
+        }>
+          <div className={'word-item-checkbox-check'}></div>
+        </div>
       </div>
     );
   }

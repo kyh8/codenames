@@ -23,6 +23,7 @@ export class Board extends React.Component {
           word={word}
           cardType={this.props.boardState[index].cardType}
           isRevealed={this.props.boardState[index].isRevealed}
+          isChecked={this.props.boardState[index].isChecked}
           revealCard={this._revealCard.bind(this, index)}/>
       );
       row.push(wordElement);
@@ -45,11 +46,12 @@ export class Board extends React.Component {
   }
 
   _revealCard(index) {
-    if (this.props.isSpymaster) {
-      return;
-    }
     let boardState = this.props.boardState;
-    boardState[index].isRevealed = true;
+    if (this.props.isSpymaster) {
+      boardState[index].isChecked = true;
+    } else {
+      boardState[index].isRevealed = true;
+    }
     this.props.updateBoardState(boardState);
   }
 

@@ -1,5 +1,6 @@
 const Board = require('./Board');
 const React = require('react');
+const Scoreboard = require('./Scoreboard');
 const seedrandom = require('seedrandom');
 const KeyInput = require('./KeyInput');
 const WordSet = require('../data/wordset.json');
@@ -58,6 +59,7 @@ export class App extends React.Component {
       cardTypes[card] = cardTypes[card] - 1;
       boardState[i] = {
         isRevealed: false,
+        isChecked: false,
         cardType: card,
       }
     }
@@ -75,12 +77,8 @@ export class App extends React.Component {
     if (newSeed.length == 0 || newSeed === this.state.seed) {
       return;
     }
-    const newBoard = this._fetchBoard(newSeed);
+    this._fetchBoard(newSeed);
     this._resetCards();
-    this.setState({
-      seed: newSeed,
-      board: newBoard,
-    });
   }
 
   _toggleSpymasterMode() {
@@ -99,6 +97,7 @@ export class App extends React.Component {
     let boardState = this.state.boardState;
     for(let i = 0; i < boardState.length; i++) {
       boardState[i].isRevealed = false;
+      boardState[i].isChecked = false;
     }
     this._updateBoardState(boardState);
   }
@@ -121,6 +120,7 @@ export class App extends React.Component {
             Submit
           </div>
         </div>
+        <Scoreboard boardState={this.state.boardState}/>
         <Board
           board={this.state.board}
           boardState={this.state.boardState}

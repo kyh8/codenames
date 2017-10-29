@@ -31,13 +31,14 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 18px;
-  background-color: #f6f6f6;
+  background-color: #f5f5dc;
   cursor: pointer;
   box-shadow: 0 0 1px black;
   border-radius: 8px;
   margin: 10px;
   margin-left: 0;
   margin-top: 0;
+  position: relative;
 }
 
 .row-item:first-child .word-item {
@@ -49,7 +50,48 @@ body {
 }
 
 .word-item:hover {
-  background-color: lightgray;
+  background-color: #dcdcc6;
+  box-shadow: 0 0 2px black;
+}
+
+.spymaster .word-item:hover {
+  background-color: lightgreen;
+}
+
+.word-item-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  border: 1px solid gray;
+  background-color: #f6f6f6;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  border: 1px solid white;
+  display: none;
+}
+
+.spymaster .word-item-checkbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.word-item-checkbox.checked {
+  background-color: green;
+}
+
+.word-item-checkbox-check {
+  background-color: white;
+  box-shadow: 0 0 1px black;
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  display: none;
+}
+
+.word-item-checkbox.checked .word-item-checkbox-check {
+  display: block;
 }
 
 .row-item {
@@ -60,7 +102,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
 }
 
 .key-input-label {
@@ -131,11 +172,13 @@ body {
 }
 
 .team1.revealed,
+.team1.score,
 .spymaster .team1 {
   background-color: #4C79A6;
 }
 
 .team2.revealed,
+.team2.score,
 .spymaster .team2 {
   background-color: #FF4C4C;
 }
@@ -148,6 +191,37 @@ body {
 .neutral.revealed,
 .spymaster .neutral {
   background-color: gray;
+}
+
+.scoreboard-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.score {
+  width: 120px;
+  height: 60px;
+  margin-left: 10px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-size: 32px;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+.score:first-child {
+  margin-left: 0;
+}
+
+.score-label {
+  font-size: 12px;
+  margin-bottom: 4px;
 }
 
 .unselectable {
