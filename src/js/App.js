@@ -4,24 +4,72 @@ const Scoreboard = require('./Scoreboard');
 const seedrandom = require('seedrandom');
 const KeyInput = require('./KeyInput');
 const WordSet = require('../data/wordset.json');
+const firebase = require("firebase/app");
+require('firebase/database')
 
 const BOARD_SIZE = 25;
 export class App extends React.Component {
   constructor(props) {
     super(props);
-    const randomWord = WordSet.default_set[
-      Math.floor(Math.random() * WordSet.default_set.length)
-    ];
+
+		// Initialize Firebase
+		const config = {
+			apiKey: "AIzaSyCQeMqbuxgauuHcM0o3tzoCZoW0kTR5KFU",
+			authDomain: "codenames-b8t.firebaseapp.com",
+			databaseURL: "https://codenames-b8t.firebaseio.com",
+			projectId: "codenames-b8t",
+			storageBucket: "codenames-b8t.appspot.com", messagingSenderId: "836284086712"
+		};
+    firebase.initializeApp(config);
+    
+    const database = firebase.database();
+
     this.state = {
-      seed: randomWord,
+      seed: '',
+      sessionKey: this._generateRandomSessionKey(),
       isSpymaster: false,
       board: [],
       boardState: [],
     }
+    this._enterOrCreateSession(this.state.sessionKey);
   }
 
   componentDidMount() {
     this._fetchBoard(this.state.seed);
+  }
+
+  _enterOrCreateSession(sessionKey) {
+    console.log('Attempting to create session with: ' + sessionKey);
+    // Get session data or start a new session if necessary
+    firebase.database().ref('sessions/' + sessionKey).once('value').then((snapshot) => {
+      if (snapshot.val() == null) {
+        // Session does not exist
+        const randomWord = WordSet.default_set[
+          Math.floor(Math.random() * WordSet.default_set.length)
+        ];
+        firebase.database().ref('sessions/' + sessionKey).set({
+          seed: randomWord
+        });
+        this.setState({
+          seed: randomWord,
+          sessionKey: sessionKey,
+        });
+      } else {
+        console.log(snapshot.val());
+        // Session exists
+        this.setState({
+          seed: snapshot.val().seed,
+          sessionKey: sessionKey,
+        });
+        this._fetchBoard(this.state.seed);
+        this._resetCards();
+        console.log('current seed' + this.state.seed);
+      }
+    });
+  }
+
+  _generateRandomSessionKey() {
+    return Math.floor(Math.random() * 10000000);
   }
 
   _fetchBoard(seed) {
@@ -52,8 +100,7 @@ export class App extends React.Component {
     }
     let availableSlots = [];
     for(let i = 0; i < board.length; i++) {
-      const availableSlots = Object.keys(cardTypes).filter((card) => {
-        return cardTypes[card] > 0;
+      const availableSlots = Object.keys(cardTypes).filter((card) => { return cardTypes[card] > 0;
       });
       const card = availableSlots[Math.floor(Math.random() * availableSlots.length)];
       cardTypes[card] = cardTypes[card] - 1;
@@ -64,6 +111,7 @@ export class App extends React.Component {
       }
     }
 
+    console.log(board);
     this.setState({
       board: board,
       boardState: boardState,
@@ -75,8 +123,10 @@ export class App extends React.Component {
     const input = document.getElementById('key-input');
     const newSeed = input.value;
     if (newSeed.length == 0 || newSeed === this.state.seed) {
+      console.log('Using the same seed or an empty string!');
       return;
     }
+    this.state.seed = newSeed;
     this._fetchBoard(newSeed);
     this._resetCards();
   }
@@ -102,6 +152,17 @@ export class App extends React.Component {
     this._updateBoardState(boardState);
   }
 
+  _changeSessions(event) {
+    event.preventDefault();
+    const input = document.getElementById('session-input');
+    const newKey = input.value;
+    if (newKey.length == 0 || newKey == this.state.sessionKey) {
+      console.log('Using the same session key or an empty string!');
+      return;
+    }
+    this._enterOrCreateSession(input.value);
+  }
+
   render() {
     return (
       <div className={
@@ -118,8 +179,17 @@ export class App extends React.Component {
         <div className='key-input-container'>
           <div className='key-input-label'>Board Key:</div>
           <form onSubmit={this._regenerateKey.bind(this)}>
-            <KeyInput initialValue={this.state.seed} />
+            <KeyInput id={'key-input'} seed={this.state.seed} />
           </form>
+          <div className='key-input-label'>Session Id:</div>
+          <form>
+            <KeyInput id={'session-input'} sessionKey={this.state.sessionKey} />
+          </form>
+          <div
+            className='key-submit button'
+            onClick={this._changeSessions.bind(this)}>
+            Change Session
+          </div>
           <div
             className='key-submit button'
             onClick={this._regenerateKey.bind(this)}>
