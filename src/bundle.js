@@ -40326,7 +40326,32 @@ module.exports={
     "Cold", "Knife", "Church", "Board", "Cloak", "Ninja", "Olympus", "Belt",
     "Light", "Death", "Stock", "Millionarie", "Day", "Knight", "Pie", "Bed",
     "Circle", "Rose", "Change", "Cap", "Triangle"
-  ]
+  ],
+  "naughty_set": [
+    "Mushroom", "Shame", "Couple", "Sweat", "Strobe", "Tubesteak", "Rug", "Butt", "Nylon", "Lick", "Hotel", "Boy", "Boob", "Biscuits",
+    "Fatty", "Share", "Slut", "Swimmers", "Pound", "Tuna", "Roach", "Brownie", "Nuts", "Blonde", "Horny", "Catcher", "Body", "Dominate",
+    "Mole", "Shave", "Orgasm", "Taboo", "Roof", "Twig", "Red", "Lube", "Nude", "Eat", "Hooters", "Legs", "Behind", "Olive",
+    "Brown", "Shower", "Oyster", "Taco", "Salad", "Udders", "Rave", "Inch", "Nipple", "Gay", "High", "Booze", "Beaver", "Pussy",
+    "Ice", "Skank", "Melons", "Tail", "Rack", "Uranus", "Queer", "Lingerie", "Needle", "Escort", "Herb", "Bear", "Beans", "Log",
+    "Hamster", "Skirt", "Gigolo", "Tap", "Pie", "Vasectomy", "Queen", "Group", "Necklace", "Commando", "Headlights", "Ashes", "Bacon", "Goose",
+    "Pillows", "Smell", "Latex", "Tavern", "Smegma", "Vegas", "Queef", "Hot", "Navel", "Gag", "Headboard", "Bed", "Ass", "Caboose",
+    "Carpet", "Smoke", "Cuffs", "Teabag", "Shot", "Vein", "Purple", "Gash", "Nail", "Hand", "Head", "Chaps", "Animal", "Coozie",
+    "Fish", "Snatch", "Rookie", "Tease", "Snort", "Vibrator", "Pucker", "Film", "Mug", "Bang", "Hammer", "Grandma",
+    "Grass", "Sniff", "Prick", "Tent", "Baked", "Video", "Pub", "G-Spot", "Movie", "Jazz", "Friction", "Eyes",
+    "Drunk", "Softballs", "Kitty", "Tequila", "Bottom", "Vinyl", "Prostate", "Chains", "Motorboat", "Crabs",  "French", "Hurl",
+    "Cheek", "Solo", "Lizard", "Threesome", "Breast", "Virgin", "Prison", "Donkey", "Monkey", "Douche", "Freckles", "Bond",
+    "Keg", "Spank", "Boxers", "Throat", "Pinch", "Vodka", "Pot", "Lips", "Mom", "Finger", "Fluff", "Bling",
+    "Rectum", "Speed", "Missionary", "Tickle", "Sin", "Vomit", "Porn", "Cuddle", "Moist", "Manboobs", "Flash", "Dildo",
+    "Cocktail", "Sperm", "Emission", "tie", "Diarrhea", "Wad", "Pork", "Bottle", "Mixer", "Crack", "Fist", "Club",
+    "Cucumber", "Spoon", "Seed", "Tip", "Intern", "Wang", "Pole", "Champagne", "Milk", "Loose", "Fire", "Choke",
+    "Noodle", "Spread", "Doggy", "Tit", "Beer", "Waste", "Poker", "Gerbil", "Member", "Bartender", "Fetish", "Bone",
+    "Motel", "Squirt", "Lotion", "Tongue", "Flesh", "Watch", "Player", "Balls", "Meat", "Cream", "Fecal", "Rubber",
+    "Kinky", "Stalker", "Bust", "Tool", "Skid", "Wax", "Pitcher", "Knees", "Martini", "Lobster", "Feather", "Booty",
+    "Joint", "Steamy", "Mesh", "Top", "Facial", "Weed", "Pipe", "Cherry", "Lust", "Knockers", "Fantasy", "Hump",
+    "Poop", "Stiff", "Nurse", "Torture", "Bong", "Wench", "Pink", "Gangbang", "Love", "Coyote", "Drill", "Acid",
+    "Line", "Stiletto", "Turd", "Touch", "Daddy", "Wet", "Pimp", "Hell", "Liquor", "Burn", "Drag", "Cougar",
+    "Briefs", "Stones", "Naked", "Orgy", "Chest", "Whip", "Pig", "Jugs", "Lighter", "Cannons", "Down", "Clap",
+  ],
 }
 
 },{}],294:[function(require,module,exports){
@@ -40501,7 +40526,6 @@ var App = exports.App = function (_React$Component) {
   }, {
     key: '_regenerateKey',
     value: function _regenerateKey(event) {
-      console.log('button pressed');
       event.preventDefault();
       var input = document.getElementById('key-input');
       var newSeed = input.value;
@@ -40562,7 +40586,37 @@ var App = exports.App = function (_React$Component) {
       return React.createElement(
         'div',
         { className: this.state.isSpymaster ? 'content-container spymaster' : 'content-container' },
+        React.createElement(
+          'div',
+          { className: 'key-setter' },
+          React.createElement(
+            'div',
+            { className: 'key-input-label' },
+            'Lobby Id:'
+          ),
+          React.createElement(
+            'form',
+            { onSubmit: this._changeSessions.bind(this) },
+            React.createElement(KeyInput, {
+              id: 'session-input',
+              sessionKey: this.state.sessionKey })
+          ),
+          React.createElement(
+            'div',
+            {
+              className: 'key-submit button',
+              onClick: this._changeSessions.bind(this) },
+            'Enter Lobby'
+          )
+        ),
         React.createElement(Scoreboard, { boardState: this.state.boardState }),
+        React.createElement(
+          'div',
+          {
+            className: 'reset-button button',
+            onClick: this._resetCards.bind(this) },
+          'Reset'
+        ),
         React.createElement(Board, {
           board: this.state.board,
           boardState: this.state.boardState,
@@ -40573,44 +40627,26 @@ var App = exports.App = function (_React$Component) {
           { className: 'key-input-container' },
           React.createElement(
             'div',
-            { className: 'key-input-label' },
-            'Board Key:'
-          ),
-          React.createElement(
-            'form',
-            { onSubmit: this._regenerateKey.bind(this) },
-            React.createElement(KeyInput, { id: 'key-input', seed: this.state.seed })
-          ),
-          React.createElement(
-            'div',
-            { className: 'key-input-label' },
-            'Session Id:'
-          ),
-          React.createElement(
-            'form',
-            null,
-            React.createElement(KeyInput, { id: 'session-input', sessionKey: this.state.sessionKey })
-          ),
-          React.createElement(
-            'div',
-            {
-              className: 'key-submit button',
-              onClick: this._changeSessions.bind(this) },
-            'Change Session'
-          ),
-          React.createElement(
-            'div',
-            {
-              className: 'key-submit button',
-              onClick: this._regenerateKey.bind(this) },
-            'Submit'
-          ),
-          React.createElement(
-            'div',
-            {
-              className: 'reset-button button',
-              onClick: this._resetCards.bind(this) },
-            'Reset'
+            { className: 'key-setter' },
+            React.createElement(
+              'div',
+              { className: 'key-input-label' },
+              'Board Key:'
+            ),
+            React.createElement(
+              'form',
+              { onSubmit: this._regenerateKey.bind(this) },
+              React.createElement(KeyInput, {
+                id: 'key-input',
+                seed: this.state.seed })
+            ),
+            React.createElement(
+              'div',
+              {
+                className: 'key-submit button',
+                onClick: this._regenerateKey.bind(this) },
+              'Submit'
+            )
           )
         ),
         React.createElement(
@@ -40785,7 +40821,7 @@ var Card = exports.Card = function (_React$Component) {
 module.exports = Card;
 
 },{"react":284}],297:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -40816,7 +40852,7 @@ var KeyInput = exports.KeyInput = function (_React$Component) {
   }
 
   _createClass(KeyInput, [{
-    key: "_updateSeedInput",
+    key: '_updateSeedInput',
     value: function _updateSeedInput() {
       var input = document.getElementById(this.props.id);
       this.setState({
@@ -40824,11 +40860,12 @@ var KeyInput = exports.KeyInput = function (_React$Component) {
       });
     }
   }, {
-    key: "render",
+    key: 'render',
     value: function render() {
-      return React.createElement("input", {
+      return React.createElement('input', {
         id: this.props.id,
-        autoComplete: "off",
+        className: 'input-field',
+        autoComplete: 'off',
         value: this.state.seedInput,
         onChange: this._updateSeedInput.bind(this) });
     }
@@ -40919,6 +40956,7 @@ ReactDOM.render(React.createElement(App, null), document.getElementById('main'))
 
 },{}],301:[function(require,module,exports){
 // shim for using process in browser
+
 var process = module.exports = {};
 
 // cached from whatever global is present so that test runners that stub it
@@ -40929,84 +40967,22 @@ var process = module.exports = {};
 var cachedSetTimeout;
 var cachedClearTimeout;
 
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
 (function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
+  try {
+    cachedSetTimeout = setTimeout;
+  } catch (e) {
+    cachedSetTimeout = function () {
+      throw new Error('setTimeout is not defined');
     }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
+  }
+  try {
+    cachedClearTimeout = clearTimeout;
+  } catch (e) {
+    cachedClearTimeout = function () {
+      throw new Error('clearTimeout is not defined');
     }
+  }
 } ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
 var queue = [];
 var draining = false;
 var currentQueue;
@@ -41031,7 +41007,7 @@ function drainQueue() {
     if (draining) {
         return;
     }
-    var timeout = runTimeout(cleanUpNextTick);
+    var timeout = cachedSetTimeout(cleanUpNextTick);
     draining = true;
 
     var len = queue.length;
@@ -41048,7 +41024,7 @@ function drainQueue() {
     }
     currentQueue = null;
     draining = false;
-    runClearTimeout(timeout);
+    cachedClearTimeout(timeout);
 }
 
 process.nextTick = function (fun) {
@@ -41060,7 +41036,7 @@ process.nextTick = function (fun) {
     }
     queue.push(new Item(fun, args));
     if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
+        cachedSetTimeout(drainQueue, 0);
     }
 };
 
@@ -41088,10 +41064,6 @@ process.off = noop;
 process.removeListener = noop;
 process.removeAllListeners = noop;
 process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
 
 process.binding = function (name) {
     throw new Error('process.binding is not supported');

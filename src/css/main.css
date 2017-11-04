@@ -75,36 +75,46 @@ body {
 
 .key-input-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 10px;
   margin-bottom: 20px;
 }
 
+.key-setter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .key-input-label {
   font-size: 14px;
 }
 
-#key-input {
+.input-field {
   margin-left: 10px;
   font-size: 14px;
   width: 180px;
   outline: none;
   height: 30px;
-  border: 0;
-  border-bottom: 1px solid gray;
+  border: 1px solid lightgray;
+  border-radius: 10px;
   padding: 0;
+  padding-left: 6px;
 }
 
-#key-input:focus {
-  border-bottom: 2px solid #4C79A6;
-  margin-bottom: -1px;
+.input-field:focus {
+  border: 2px solid #4C79A6;
+  margin-bottom: -2px;
+  margin-left: 8px;
 }
 
 .key-submit.button {
   margin-left: 10px;
   background-color: rgba(0,122,255,0.8);
   color: white;
+  font-size: 14px;
 }
 
 .key-submit:hover {
@@ -138,10 +148,6 @@ body {
 
 .buttons-container .button:first-child {
   margin-left: 0;
-}
-
-.reset-button {
-  margin-left: 10px;
 }
 
 .spymaster-toggle div {

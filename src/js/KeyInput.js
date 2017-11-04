@@ -19,6 +19,7 @@ export class KeyInput extends React.Component {
     return (
       <input
         id={this.props.id}
+        className='input-field'
         autoComplete="off"
         value={this.state.seedInput}
         onChange={this._updateSeedInput.bind(this)}/>

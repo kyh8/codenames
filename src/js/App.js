@@ -21,7 +21,7 @@ export class App extends React.Component {
 			storageBucket: "codenames-b8t.appspot.com", messagingSenderId: "836284086712"
 		};
     firebase.initializeApp(config);
-    
+
     this.state = {
       seed: '',
       sessionKey: this._generateRandomSessionKey(),
@@ -142,7 +142,6 @@ export class App extends React.Component {
   }
 
   _regenerateKey(event) {
-    console.log('button pressed');
     event.preventDefault();
     const input = document.getElementById('key-input');
     const newSeed = input.value;
@@ -200,35 +199,43 @@ export class App extends React.Component {
         ? 'content-container spymaster'
         : 'content-container'
       }>
+        <div className='key-setter'>
+          <div className='key-input-label'>Lobby Id:</div>
+          <form onSubmit={this._changeSessions.bind(this)}>
+            <KeyInput
+              id={'session-input'}
+              sessionKey={this.state.sessionKey} />
+          </form>
+          <div
+            className='key-submit button'
+            onClick={this._changeSessions.bind(this)}>
+            Enter Lobby
+          </div>
+        </div>
         <Scoreboard boardState={this.state.boardState}/>
+        <div
+          className='reset-button button'
+          onClick={this._resetCards.bind(this)}>
+          Reset
+        </div>
         <Board
           board={this.state.board}
           boardState={this.state.boardState}
           isSpymaster={this.state.isSpymaster}
           updateBoardState={this._updateBoardState.bind(this)}/>
         <div className='key-input-container'>
-          <div className='key-input-label'>Board Key:</div>
-          <form onSubmit={this._regenerateKey.bind(this)}>
-            <KeyInput id={'key-input'} seed={this.state.seed} />
-          </form>
-          <div className='key-input-label'>Session Id:</div>
-          <form>
-            <KeyInput id={'session-input'} sessionKey={this.state.sessionKey} />
-          </form>
-          <div
-            className='key-submit button'
-            onClick={this._changeSessions.bind(this)}>
-            Change Session
-          </div>
-          <div
-            className='key-submit button'
-            onClick={this._regenerateKey.bind(this)}>
-            Submit
-          </div>
-          <div
-            className='reset-button button'
-            onClick={this._resetCards.bind(this)}>
-            Reset
+          <div className='key-setter'>
+            <div className='key-input-label'>Board Key:</div>
+            <form onSubmit={this._regenerateKey.bind(this)}>
+              <KeyInput
+                id={'key-input'}
+                seed={this.state.seed} />
+            </form>
+            <div
+              className='key-submit button'
+              onClick={this._regenerateKey.bind(this)}>
+              Submit
+            </div>
           </div>
         </div>
         <div className='buttons-container unselectable'>
