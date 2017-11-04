@@ -40373,8 +40373,6 @@ var App = exports.App = function (_React$Component) {
     };
     firebase.initializeApp(config);
 
-    var database = firebase.database();
-
     _this.state = {
       seed: '',
       sessionKey: _this._generateRandomSessionKey(),
@@ -40399,27 +40397,52 @@ var App = exports.App = function (_React$Component) {
       console.log('Attempting to create session with: ' + sessionKey);
       // Get session data or start a new session if necessary
       firebase.database().ref('sessions/' + sessionKey).once('value').then(function (snapshot) {
+        console.log('Returning from call');
         if (snapshot.val() == null) {
+          console.log('Session doesnt exist');
           // Session does not exist
-          var randomWord = WordSet.default_set[Math.floor(Math.random() * WordSet.default_set.length)];
-          firebase.database().ref('sessions/' + sessionKey).set({
-            seed: randomWord
-          });
+          var randomNum = Math.random();
+          var randomWord = WordSet.default_set[Math.floor(randomNum * WordSet.default_set.length)];
           _this2.setState({
             seed: randomWord,
             sessionKey: sessionKey
           });
+          _this2._fetchBoard(_this2.state.seed);
+          firebase.database().ref('sessions/' + sessionKey).set({
+            seed: _this2.state.seed,
+            boardState: _this2.state.boardState
+          });
         } else {
-          console.log(snapshot.val());
           // Session exists
+          console.log('Session exists');
           _this2.setState({
             seed: snapshot.val().seed,
             sessionKey: sessionKey
           });
           _this2._fetchBoard(_this2.state.seed);
-          _this2._resetCards();
-          console.log('current seed' + _this2.state.seed);
+          _this2._updateBoardState(snapshot.val().boardState);
         }
+        // Attaching a listener for the board state
+        console.log('Attaching listener to: ' + _this2.state.boardState);
+        _this2._getCurrentSessionRef('').on('value', function (snapshot) {
+          if (snapshot.val() !== null) {
+            if (snapshot.val().seed != _this2.state.seed) {
+              console.log('Updating seed');
+              console.log(snapshot.val().seed);
+              console.log(_this2.state.seed);
+              _this2._fetchBoard(snapshot.val().seed);
+            }
+            if (snapshot.val() != _this2.state.boardState) {
+              console.log('Updating boardState');
+              console.log(snapshot.val().boardState);
+              console.log(_this2.state.boardState);
+              _this2._updateBoardState(snapshot.val().boardState);
+            }
+          } else {
+            console.log('Session does not exist yet, cannot listen to it:');
+            console.log('Session ID: ' + sessionKey);
+          }
+        });
       });
     }
   }, {
@@ -40430,6 +40453,7 @@ var App = exports.App = function (_React$Component) {
   }, {
     key: '_fetchBoard',
     value: function _fetchBoard(seed) {
+      console.log('Creating board with seed: ' + seed);
       Math.seedrandom(seed);
       var corpusSize = WordSet.default_set.length;
       var indices = [];
@@ -40468,9 +40492,8 @@ var App = exports.App = function (_React$Component) {
           cardType: card
         };
       }
-
-      console.log(board);
       this.setState({
+        seed: seed,
         board: board,
         boardState: boardState
       });
@@ -40478,6 +40501,7 @@ var App = exports.App = function (_React$Component) {
   }, {
     key: '_regenerateKey',
     value: function _regenerateKey(event) {
+      console.log('button pressed');
       event.preventDefault();
       var input = document.getElementById('key-input');
       var newSeed = input.value;
@@ -40485,8 +40509,8 @@ var App = exports.App = function (_React$Component) {
         console.log('Using the same seed or an empty string!');
         return;
       }
-      this.state.seed = newSeed;
       this._fetchBoard(newSeed);
+      this._getCurrentSessionRef('seed').set(newSeed);
       this._resetCards();
     }
   }, {
@@ -40502,6 +40526,7 @@ var App = exports.App = function (_React$Component) {
       this.setState({
         boardState: boardState
       });
+      this._getCurrentSessionRef('boardState').set(this.state.boardState);
     }
   }, {
     key: '_resetCards',
@@ -40511,6 +40536,7 @@ var App = exports.App = function (_React$Component) {
         boardState[i].isRevealed = false;
         boardState[i].isChecked = false;
       }
+      console.log('emptied boardstate');
       this._updateBoardState(boardState);
     }
   }, {
@@ -40524,6 +40550,11 @@ var App = exports.App = function (_React$Component) {
         return;
       }
       this._enterOrCreateSession(input.value);
+    }
+  }, {
+    key: '_getCurrentSessionRef',
+    value: function _getCurrentSessionRef(child) {
+      return firebase.database().ref('sessions/' + this.state.sessionKey + '/' + child);
     }
   }, {
     key: 'render',
